@@ -3,6 +3,8 @@
 namespace App\Classes;
 
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\InputStream;
@@ -14,20 +16,27 @@ class Process
     /**
      * @var SymfonyStyle $io
      */
-    private $io;
+    protected $io;
 
     /**
-     * @var bool $debug
+     * @var InputInterface
      */
-    private $debug = false;
+    protected $input;
+
+    /**
+     * @var OutputInterface
+     */
+    protected $output;
 
     /**
      * Process constructor.
      * @param SymfonyStyle $io
      */
-    public function __construct(SymfonyStyle $io)
+    public function __construct(SymfonyStyle $io, InputInterface $input, OutputInterface $output)
     {
         $this->io = $io;
+        $this->input = $input;
+        $this->output = $output;
     }
 
     /**
@@ -36,49 +45,33 @@ class Process
      * @param string $cmd
      * @return string
      */
-    public function execute($command, array $input = null, $force = false, $timeout = 3600, $cwd = null, array $env = null)
+    public function execute($command, $force = false)
     {
+        $optionValue = $this->input->getOption('debug');
+        $debug = ($optionValue !== false);
 
         $this->io->writeln("\n<fg=cyan>$command</>");
 
-        $process = new SymfonyProcess($command, $cwd, $env, null, $timeout);
-        $process->setIdleTimeout(180);
-
-        $inputStream = null;
-        if ($input !== null && is_array($input)) {
-            $inputStream = new InputStream();
-            $process->setInput($inputStream);
-
-            !$this->debug ?: $this->io->writeln('[debug] Pty is on');
-            $process->setPty(true);
-        }
-
-        $bar = $this->progressStart();
+        $process = new SymfonyProcess($command, null, null, null, 3600);
+        $process->setIdleTimeout(360);
 
         $process->start();
 
-        $process->wait(function ($type, $buffer) use ($bar, $input, $inputStream) {
-            !$this->debug ?: $this->io->writeln("[debug] $buffer");
+        $bar = null;
+        if (!$debug) {
+            $bar = $this->progressStart();
+        }
 
-            if ($input !== null && is_array($input)) {
-
-                $last = null;
-                foreach($input as $expect => $send) {
-                    if (str_contains($buffer, $expect) && $expect !== $last) {
-                        $inputStream->write($send . "\n");
-                        $last = $expect;
-                    }
-
-                    usleep(5000);
-                }
-
+        $process->wait(function ($type, $buffer) use ($bar, $debug) {
+            if ($debug) {
+                $this->io->writeln("[OUTPUT] $buffer");
+            } else {
+                $bar->advance();
+                usleep(200000);
             }
-
-            $bar->advance();
-            usleep(200000);
         });
 
-        $this->progressStop($bar);
+        $debug ?: $this->progressStop($bar);
         $process->stop();
 
         if (!$process->isSuccessful()) {
