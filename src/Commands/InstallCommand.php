@@ -13,7 +13,9 @@ use App\Installer\UNIT3D\Unit3dSetup;
 use App\Traits\ConsoleTools;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -46,7 +48,8 @@ class InstallCommand extends Command
         $this
             ->setName('install')
             ->setDescription('Provisions Server')
-            ->setHelp('Provisions Server and installs the UNIT3D Platform.');
+            ->setHelp('Provisions Server and installs the UNIT3D Platform.')
+            ->addOption('debug', 'd', InputOption::VALUE_NONE);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -54,12 +57,19 @@ class InstallCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $this->config = new Config();
 
+        $this->io->writeln('debug -> ' . $input->getOption('debug'));
+
         $this->displayIntro();
 
         foreach ($this->steps as $class => $header) {
             $this->head($header);
 
-            (new $class($this->io, $this->config))->handle();
+            (new $class(
+                $this->io,
+                $this->config,
+                $input,
+                $output
+            ))->handle();
 
             $this->done();
         }

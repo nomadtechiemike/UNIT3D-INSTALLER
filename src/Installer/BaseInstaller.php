@@ -5,6 +5,8 @@ namespace App\Installer;
 use App\Classes\Config;
 use App\Classes\Process;
 use App\Traits\ConsoleTools;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 abstract class BaseInstaller
@@ -36,11 +38,24 @@ abstract class BaseInstaller
      */
     protected $timeout = 15;
 
-    public function __construct(SymfonyStyle $io, Config $config)
+    /**
+     * @var InputInterface
+     */
+    protected $input;
+
+    /**
+     * @var OutputInterface
+     */
+    protected $output;
+
+    public function __construct(SymfonyStyle $io, Config $config, InputInterface $input, OutputInterface $output)
     {
         $this->io = $io;
-        $this->process = new Process($this->io);
+        $this->input = $input;
+        $this->output = $output;
         $this->config = $config;
+
+        $this->process = new Process($io, $input, $output);
         $this->pkg_manager = $config->get('os.'.distname().'.pkg_manager');
     }
 
@@ -54,7 +69,7 @@ abstract class BaseInstaller
     protected function process(array $commands, $force = false)
     {
         foreach ($commands as $cmd) {
-            $this->process->execute($cmd, null, $force);
+            $this->process->execute($cmd, $force);
         }
     }
 

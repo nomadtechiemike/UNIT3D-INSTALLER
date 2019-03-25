@@ -25,7 +25,12 @@ class InstallerPolicies extends BasePolicy
     public function allows($param = null)
     {
         foreach ($this->steps as $class) {
-            (new $class($this->io, $this->config))->allows($param);
+            (new $class(
+                $this->io,
+                $this->config,
+                $this->input,
+                $this->output
+            ))->allows($param);
         }
     }
 }

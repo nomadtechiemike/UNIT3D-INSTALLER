@@ -11,6 +11,11 @@ class DatabaseSetup extends BaseInstaller
         $driver = $this->config->app('database_driver');
         $class = $this->config->app('database_installers.' . $driver);
 
-        (new $class($this->io, $this->config))->handle();
+        (new $class(
+            $this->io,
+            $this->config,
+            $this->input,
+            $this->output
+        ))->handle();
     }
 }
