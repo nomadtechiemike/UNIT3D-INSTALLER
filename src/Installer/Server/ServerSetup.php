@@ -19,7 +19,7 @@ class ServerSetup extends BaseInstaller
 
         $this->chat();
 
-        $this->apiKeys();
+      //  $this->apiKeys();
     }
 
     protected function server()
@@ -61,7 +61,7 @@ class ServerSetup extends BaseInstaller
         $this->io->writeln('<fg=blue>User Settings</>');
         $this->seperator();
 
-        $dbowner = $this->question('Owner Username', '');
+        $dbowner = $this->question('Owner Username', 'nomad');
         $this->config->app('owner', $dbowner);
 
         $dbpass = $this->question('Owner Password', '');
@@ -87,13 +87,13 @@ class ServerSetup extends BaseInstaller
         $db_root_pass = $this->question('DB Server Root Password', '');
         $this->config->app('dbrootpass', $db_root_pass);
 
-        $db = $this->question('UNIT3D DB Name', 'unit3d');
+        $db = $this->question('DB Name', 'scoobydoo');
         $this->config->app('db', $db);
 
-        $dbuser = $this->question('UNIT3D DB User', 'unit3d');
+        $dbuser = $this->question('DB User', 'nomad');
         $this->config->app('dbuser', $dbuser);
 
-        $dbpass = $this->question('UNIT3D DB Password', '');
+        $dbpass = $this->question('DB Password', '');
         $this->config->app('dbpass', $dbpass);
     }
 
@@ -106,7 +106,7 @@ class ServerSetup extends BaseInstaller
         $this->config->app('echo-port', $port);
     }
 
-    protected function apiKeys()
+  /*  protected function apiKeys()
     {
         $this->io->writeln('<fg=blue>API Keys</>');
         $this->seperator();
@@ -139,7 +139,7 @@ class ServerSetup extends BaseInstaller
 
         $key = $this->question('IGDB Key', '');
         $this->config->app('igdb-key', $key);
-    }
+    }*/
 
     protected function mail()
     {
@@ -165,10 +165,10 @@ class ServerSetup extends BaseInstaller
 
         $this->config->app('mail_driver', $value);
 
-        $value = $this->question('Mail Host', '');
+        $value = $this->question('Mail Host', 'smtp.gmail.com');
         $this->config->app('mail_host', $value);
 
-        $value = $this->question('Mail Port', '');
+        $value = $this->question('Mail Port', '465');
         $this->config->app('mail_port', $value);
 
         $value = $this->question('Mail Username', '');
@@ -176,6 +176,9 @@ class ServerSetup extends BaseInstaller
 
         $value = $this->question('Mail Password', '');
         $this->config->app('mail_password', $value);
+
+        $value = $this->question('secure', 'SSL');
+        $this->config->app('secure', $value);
 
         $value = $this->question('Mail From Name', '');
         $this->config->app('mail_from_name', $value);

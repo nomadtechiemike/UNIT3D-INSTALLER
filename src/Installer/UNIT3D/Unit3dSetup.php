@@ -65,6 +65,7 @@ class Unit3dSetup extends BaseInstaller
                 '{{MAILPORT}}' => $this->config->app('mail_port'),
                 '{{MAILUSERNAME}}' => $this->config->app('mail_username'),
                 '{{MAILPASSWORD}}' => $this->config->app('mail_password'),
+                '{{SECURE}}' => $this->config->app('secure'),
                 '{{MAILFROMNAME}}' => $this->config->app('mail_from_name')
             ],
             '../.env.stub',
@@ -108,10 +109,10 @@ class Unit3dSetup extends BaseInstaller
             '{{PROTOCOL}}' => $protocol,
         ], '../laravel-echo-server.stub', '/var/www/html/laravel-echo-server.json');
 
-//        $this->createFromStub([
-//            '{{INSTALLDIR}}' => $install_dir,
-//            '{{WEBUSER}}' => $web_user,
-//        ], 'supervisor/app.conf', '/etc/supervisor/conf.d/unit3d.conf');
+       $this->createFromStub([
+            '{{INSTALLDIR}}' => $install_dir,
+           '{{WEBUSER}}' => $web_user,
+       ], 'supervisor/app.conf', '/etc/supervisor/conf.d/unit3d.conf');
 
         $this->process([
             'supervisorctl reread',
@@ -126,10 +127,10 @@ class Unit3dSetup extends BaseInstaller
             'laravel-echo-server client:add',
             'composer install',
             'npm install',
-            'php artisan ui uikit --auth',
             'npm run prod',
             'php artisan key:generate',
             'php artisan migrate --seed',
+            'php artisan ui uikit --auth',
             'php artisan test:email'
         ];
 

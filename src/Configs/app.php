@@ -47,13 +47,14 @@ return [
     'mail_port' => '',
     'mail_username' => '',
     'mail_password' => '',
+    'secure' => '',
     'mail_from_name' => '',
 
     /* Chat */
     'echo-port' => '',
 
-    /* API Keys */
+    /* API Keys
     'tmdb-key' => '',
     'omdb-key' => '',
-    'igdb-key' => '',
+    'igdb-key' => '',*/
 ];
