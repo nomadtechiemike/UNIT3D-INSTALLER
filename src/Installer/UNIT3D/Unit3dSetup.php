@@ -60,9 +60,6 @@ class Unit3dSetup extends BaseInstaller
                 '{{OWNER}}' => $this->config->app('owner'),
                 '{{OWNEREMAIL}}' => $this->config->app('owner_email'),
                 '{{OWNERPASSWORD}}' => $this->config->app('password'),
-                '{{TMDBAPIKEY}}' => $this->config->app('tmdb-key'),
-                '{{OMDBAPIKEY}}' => $this->config->app('omdb-key'),
-                '{{IGDBAPIKEY}}' => $this->config->app('igdb-key'),
                 '{{MAILDRIVER}}' => $this->config->app('mail_driver'),
                 '{{MAILHOST}}' => $this->config->app('mail_host'),
                 '{{MAILPORT}}' => $this->config->app('mail_port'),
@@ -111,10 +108,10 @@ class Unit3dSetup extends BaseInstaller
             '{{PROTOCOL}}' => $protocol,
         ], '../laravel-echo-server.stub', '/var/www/html/laravel-echo-server.json');
 
-        $this->createFromStub([
-            '{{INSTALLDIR}}' => $install_dir,
-            '{{WEBUSER}}' => $web_user,
-        ], 'supervisor/app.conf', '/etc/supervisor/conf.d/unit3d.conf');
+//        $this->createFromStub([
+//            '{{INSTALLDIR}}' => $install_dir,
+//            '{{WEBUSER}}' => $web_user,
+//        ], 'supervisor/app.conf', '/etc/supervisor/conf.d/unit3d.conf');
 
         $this->process([
             'supervisorctl reread',
@@ -128,6 +125,7 @@ class Unit3dSetup extends BaseInstaller
         $www_cmds = [
             'laravel-echo-server client:add',
             'composer install',
+            'php artisan ui uikit --auth',
             'npm install',
             'npm run prod',
             'php artisan key:generate',

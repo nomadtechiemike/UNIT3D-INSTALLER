@@ -28,7 +28,7 @@ class InstallCommand extends Command
         DatabaseSetup::class => 'Configuring & Securing Database',
         PhpSetup::class => 'PHP & PHP-FPM Configuration',
         NginxSetup::class => 'Nginx Setup & Configurations',
-        Unit3dSetup::class => 'UNIT3D Settings and Configuration',
+      Unit3dSetup::class => 'UNIT3D Settings and Configuration',
     ];
 
     /**

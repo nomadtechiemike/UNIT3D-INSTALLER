@@ -66,7 +66,8 @@ install_composer() {
 # Adds installer packages
 installer_pkgs() {
     echo -e "\n$Cyan Adding Installer Packages ... $Color_Off"
-
+    composer require laravel/ui
+    composer require torrix/laravel-ui-uikit
     composer install > /dev/null 2>&1
     check $? "Adding Installer Packages Failed!"
 

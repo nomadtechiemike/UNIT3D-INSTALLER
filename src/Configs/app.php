@@ -5,7 +5,7 @@ use App\Installer\Database\MySqlSetup;
 return [
     'min_php_version' => '7.4',
 
-    'repository' => 'https://github.com/ozdemirburak/laravel-6-simple-cms.git',
+    'repository' => 'https://github.com/laravel/laravel.git',
 
 
     'database_installers' => [
