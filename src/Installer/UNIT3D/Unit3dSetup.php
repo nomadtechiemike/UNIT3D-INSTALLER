@@ -125,8 +125,8 @@ class Unit3dSetup extends BaseInstaller
         $www_cmds = [
             'laravel-echo-server client:add',
             'composer install',
-            'php artisan ui uikit --auth',
             'npm install',
+            'php artisan ui uikit --auth',
             'npm run prod',
             'php artisan key:generate',
             'php artisan migrate --seed',
