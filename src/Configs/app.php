@@ -7,6 +7,7 @@ return [
 
     'repository' => 'https://github.com/torrix/laravel-ui-uikit.git',
 
+
     'database_installers' => [
         /**
          * Map to the Installer class
