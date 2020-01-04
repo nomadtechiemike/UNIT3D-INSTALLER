@@ -5,7 +5,7 @@ use App\Installer\Database\MySqlSetup;
 return [
     'min_php_version' => '7.4',
 
-    'repository' => 'https://github.com/torrix/laravel-ui-uikit.git',
+    'repository' => 'https://github.com/nomadtechiemike/laravel-ui-uikit.git',
 
 
     'database_installers' => [
