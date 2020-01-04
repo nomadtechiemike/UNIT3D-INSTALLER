@@ -1,6 +1,6 @@
 {
-    "name": "unit3d/installer",
-    "description": "Installer for UNIT3D",
+    "name": "webserver/installer",
+    "description": "Installer for WebServer",
     "type": "project",
     "require": {
         "php": ">=7.2",
